@@ -14,9 +14,31 @@ app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
-
+// Import routes
 import userRoutes from "./routes/user.route.js"
+import courseRoutes from "./routes/course.route.js"
+import sectionRoutes from "./routes/section.route.js"
+import lectureRoutes from "./routes/lecture.route.js"
+// import searchRoutes from "./routes/search.route.js"
 
-app.use("/v1/api/users", userRoutes)
+// Use routes
+app.use("/api/users", userRoutes)
+app.use("/api/courses", courseRoutes)
+app.use("/api/sections", sectionRoutes)
+app.use("/api/lectures", lectureRoutes)
+// app.use("/api/search", searchRoutes)
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    const status = err.statusCode || 500;
+    const message = err.message || "Internal Server Error";
+    
+    res.status(status).json({
+        success: false,
+        statusCode: status,
+        message: message,
+        errors: err.errors || []
+    });
+});
 
 export default app;

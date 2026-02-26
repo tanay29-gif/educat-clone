@@ -12,7 +12,9 @@ const port = process.env.PORT || 5000;
 
 const connectDB = async () => {
    try {
-    await mongoose.connect(`${uri}/${dbName}`);
+    await mongoose.connect(`${uri}/${dbName}`, { family: 4 
+        // Force IPv4
+        });
 
     console.log("MongoDB connected successfully");
 

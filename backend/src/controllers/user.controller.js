@@ -33,12 +33,12 @@ const registerUser = asyncHandler(async (req, res) => {
     console.log("body: ", req.body);
 
     if ([username, password, fullName, email, role].some(field => field.trim() === "")) {
-        throw new ApiResponse(400, "All fields are required");
+        throw new ApiError(400, "All fields are required");
     }
     await User.findOne({ $or: [{ username }, { email }] })
         .then(existingUser => {
             if (existingUser) {
-                throw new ApiResponse(409, "Username or email already in use");
+                throw new ApiError(409, "Username or email already in use");
             }
         });
     console.log("req.file: ", req.file);
@@ -99,7 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
 
     if ([username, password].some(field => field.trim() === "")) {
-        throw new ApiResponse(400, "All fields are required");
+        throw new ApiError(400, "All fields are required");
     }
     const user = await User.findOne({ username }).select("+password");
     if (!user) {
@@ -154,7 +154,7 @@ const changePassword = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
     if ([oldPassword, newPassword].some(field => field.trim() === "")) {
-        throw new ApiResponse(400, "All fields are required");
+        throw new ApiError(400, "All fields are required");
     }
     const user = await User.findById(userId).select("+password");
     if (!user) {
@@ -172,12 +172,13 @@ const changePassword = asyncHandler(async (req, res) => {
 });
 
 const getCurrentUser = asyncHandler(async(req, res) => {
+     console.log("Fetching current user:", req.user);
     return res
     .status(200)
     .json(new ApiResponse(
         200,
-        req.user,
-        "User fetched successfully"
+        "User fetched successfully",
+        req.user
     ))
 })
 
@@ -275,8 +276,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                 200, 
-                {accessToken, refreshToken: newRefreshToken},
-                "Access token refreshed"
+                "Access token refreshed",
+                {accessToken, refreshToken: newRefreshToken}
             )
         )
     } catch (error) {

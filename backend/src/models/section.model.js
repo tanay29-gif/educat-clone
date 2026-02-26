@@ -16,7 +16,18 @@ const sectionSchema = new mongoose.Schema(
       required: true
     }
   },
-  { timestamps: true }
+  { 
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
 );
+
+// Virtual to populate lectures
+sectionSchema.virtual("lectures", {
+  ref: "Lecture",
+  localField: "_id",
+  foreignField: "section"
+});
 
 export const Section = mongoose.model("Section", sectionSchema);

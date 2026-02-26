@@ -1,0 +1,268 @@
+/* Edit Course Page Styling */
+.edit-course-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.edit-course-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+}
+
+.edit-course-card h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.course-status {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.course-status span {
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.course-status span.published {
+  background-color: #efe;
+  color: #3c3;
+}
+
+.course-status span.draft {
+  background-color: #eee;
+  color: #666;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #eee;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #666;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.tab:hover {
+  color: #667eea;
+}
+
+.tab.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.course-form {
+  display: grid;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.submit-btn {
+  padding: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.thumbnail-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.current-thumbnail {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.file-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-input-btn {
+  padding: 10px 20px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.file-input-btn:hover:not(:disabled) {
+  background: #764ba2;
+}
+
+.file-input-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.publish-section {
+  padding: 30px;
+  text-align: center;
+}
+
+.publish-info {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.publish-info h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.publish-info p {
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.publish-info ul {
+  text-align: left;
+  max-width: 400px;
+  margin: 15px auto;
+  list-style: none;
+  padding: 0;
+}
+
+.publish-info ul li {
+  padding: 8px 0;
+  color: #666;
+}
+
+.publish-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.publish-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.publish-btn:disabled,
+.publish-btn.published {
+  background: #ddd;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.sections-tab {
+  padding: 20px 0;
+}
+
+.error-message {
+  background: #fee;
+  color: #c33;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border-left: 4px solid #e74c3c;
+  font-size: 14px;
+}
+
+.success-message {
+  background: #efe;
+  color: #3c3;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border-left: 4px solid #27ae60;
+  font-size: 14px;
+}
+
