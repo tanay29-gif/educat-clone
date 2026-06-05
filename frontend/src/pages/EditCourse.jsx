@@ -50,7 +50,7 @@ export default function EditCourse() {
         },
       });
       setThumbnailPreview(response.data.data.thumbnail);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch course data");
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ export default function EditCourse() {
       setThumbnailPreview(response.data.data.thumbnail);
       setSuccess("Thumbnail updated successfully");
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err) {
+    } catch {
       setError("Failed to update thumbnail");
     } finally {
       setSaving(false);

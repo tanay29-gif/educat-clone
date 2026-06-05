@@ -121,7 +121,7 @@ export default function Profile() {
       setAvatarFile(null);
       setSuccess("Avatar updated successfully");
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err) {
+    } catch {
       setError("Failed to update avatar");
     }
   };

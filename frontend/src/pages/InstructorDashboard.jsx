@@ -19,7 +19,7 @@ export default function InstructorDashboard() {
       const response = await courseService.getMyCourses();
       console.log("📥 My courses response:", response);
       setCourses(response.data.data);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch courses");
     } finally {
       setLoading(false);
@@ -34,7 +34,7 @@ export default function InstructorDashboard() {
     try {
       await courseService.deleteCourse(courseId);
       setCourses(courses.filter((c) => c._id !== courseId));
-    } catch (err) {
+    } catch {
       setError("Failed to delete course");
     }
   };

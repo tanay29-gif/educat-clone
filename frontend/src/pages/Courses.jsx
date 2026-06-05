@@ -36,7 +36,7 @@ export default function Courses() {
       console.log("Courses response:", response.data);
       setCourses(response.data?.data || []);
       setTotalPages(Math.ceil((response.data?.data?.length || 0) / 12));
-    } catch (err) {
+    } catch {
       setError("Failed to fetch courses");
     } finally {
       setLoading(false);
@@ -48,7 +48,7 @@ export default function Courses() {
     try {
       const response = await courseService.searchCourses(searchQuery, page, 12);
       setCourses(response.data?.data || []);
-    } catch (err) {
+    } catch {
       setError("Search failed");
     } finally {
       setLoading(false);

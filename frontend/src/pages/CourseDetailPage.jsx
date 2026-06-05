@@ -163,7 +163,7 @@ export default function CourseDetailPage() {
             <h2>Course Structure</h2>
             <div className="course-curriculum">
               {sections && sections.length > 0 ? (
-                sections.map((section, index) => (
+                sections.map((section) => (
                   <div key={section._id} className="curriculum-section">
                     <div
                       className="section-header"
