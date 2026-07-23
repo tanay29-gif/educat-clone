@@ -48,7 +48,7 @@ export default function Login() {
       } else {
         navigate("/student-dashboard");
       }
-    } catch (err) {
+    } catch {
       setError(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
