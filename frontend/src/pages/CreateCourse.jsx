@@ -67,7 +67,7 @@ export default function CreateCourse() {
       console.log("Course created:", response.data);
       localStorage.setItem("createdCourseId", response.data.data._id);
       navigate("/instructor-dashboard");
-    } catch {
+    } catch (err) {
       setError(err.response?.data?.message || "Failed to create course");
     } finally {
       setLoading(false);

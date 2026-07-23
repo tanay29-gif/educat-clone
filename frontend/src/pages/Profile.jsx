@@ -94,7 +94,7 @@ export default function Profile() {
       setIsEditing(false);
       setSuccess("Profile updated successfully");
       setTimeout(() => setSuccess(""), 3000);
-    } catch  {
+    } catch(err)  {
       setError(err.response?.data?.message || "Failed to update profile");
     }
   };
