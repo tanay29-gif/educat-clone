@@ -2,20 +2,33 @@ name: Frontend React CI
 
 on:
   push:
-    # Only run when code inside the 'frontend' folder changes
     paths:
       - 'frontend/**'
-    branches: [ main ]
+    # This covers 'main' (Production) and all other branches (Staging)
+    branches:
+      - '**'
   pull_request:
     paths:
       - 'frontend/**'
-    branches: [ main ]
+    # This covers PRs targeting main (Preview)
+    branches:
+      - main
 
 jobs:
   test-frontend:
     runs-on: ubuntu-latest
+    
+    # DYNAMIC ENVIRONMENT LOGIC
+    # 1. If it's a Pull Request -> 'Preview'
+    # 2. If it's a Push to 'main' -> 'Production'
+    # 3. Otherwise (Push to any other branch) -> 'Staging'
+    environment:
+      name: >-
+        ${{ 
+          github.event_name == 'pull_request' && 'Preview' || 
+          (github.ref == 'refs/heads/main' && 'Production' || 'Staging') 
+        }}
 
-    # This tells GitHub to run all 'run' commands inside the frontend folder
     defaults:
       run:
         working-directory: ./frontend
@@ -29,7 +42,6 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          # Tell the cacher where to find the package-lock.json
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
