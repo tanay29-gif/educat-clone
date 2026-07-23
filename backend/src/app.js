@@ -33,7 +33,6 @@ app.use("/api/lectures", lectureRoutes)
 app.use("/api/health", (req, res) => {
     res.status(200).json({ status: "ok" });
 })
-// app.use("/api/search", searchRoutes)
 
 // Error handling middleware
 app.use((err, req, res, next) => {

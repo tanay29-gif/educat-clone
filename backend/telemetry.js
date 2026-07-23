@@ -27,5 +27,7 @@ try {
   console.log("OpenTelemetry started");
 } catch (err) {
   console.error("Failed to start OpenTelemetry", err);
+
+  // this is for checking the the webhook works or not 
 }
 
