@@ -92,7 +92,7 @@ const CourseMange = () => {
       setSuccess("Section deleted successfully!");
       setExpandedSection(null);
       setTimeout(() => setSuccess(""), 3000);
-    } catch {
+    } catch(err) {
       setError(err.response?.data?.message || "Failed to delete section");
     } finally {
       setSavingSectionId(null);
@@ -156,7 +156,7 @@ const CourseMange = () => {
       
       setSuccess("Lecture deleted successfully!");
       setTimeout(() => setSuccess(""), 3000);
-    } catch {
+    } catch(err) {
       setError(err.response?.data?.message || "Failed to delete lecture");
     } finally {
       setSavingLectureId(null);

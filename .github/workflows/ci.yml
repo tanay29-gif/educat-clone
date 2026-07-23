@@ -4,13 +4,11 @@ on:
   push:
     paths:
       - 'frontend/**'
-    # This covers 'main' (Production) and all other branches (Staging)
     branches:
       - '**'
   pull_request:
     paths:
       - 'frontend/**'
-    # This covers PRs targeting main (Preview)
     branches:
       - main
 
@@ -18,16 +16,9 @@ jobs:
   test-frontend:
     runs-on: ubuntu-latest
     
-    # DYNAMIC ENVIRONMENT LOGIC
-    # 1. If it's a Pull Request -> 'Preview'
-    # 2. If it's a Push to 'main' -> 'Production'
-    # 3. Otherwise (Push to any other branch) -> 'Staging'
-    environment:
-      name: >-
-        ${{ 
-          github.event_name == 'pull_request' && 'Preview' || 
-          (github.ref == 'refs/heads/main' && 'Production' || 'Staging') 
-        }}
+    # This specifically tells GitHub: if it's a push, use NO environment. 
+    # If it's a PR, use the 'Preview' environment.
+    environment: ${{ github.event_name == 'push' && fromJSON('null') || 'Preview' }}
 
     defaults:
       run:
