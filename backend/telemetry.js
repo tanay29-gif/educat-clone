@@ -1,5 +1,12 @@
 //telemetry.js
 
+// npm install @opentelemetry/sdk-node \
+//             @opentelemetry/auto-instrumentations-node \
+//             @opentelemetry/exporter-metrics-otlp-http \
+//             @opentelemetry/resources \
+//             @opentelemetry/semantic-conventions \
+//             @opentelemetry/host-metrics
+
 import 'dotenv/config';
 
 import { NodeSDK } from "@opentelemetry/sdk-node";
