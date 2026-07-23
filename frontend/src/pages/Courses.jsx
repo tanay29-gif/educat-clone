@@ -36,7 +36,7 @@ export default function Courses() {
       console.log("Courses response:", response.data);
       setCourses(response.data?.data || []);
       setTotalPages(Math.ceil((response.data?.data?.length || 0) / 12));
-    } catch {
+    } catch  {
       setError("Failed to fetch courses");
     } finally {
       setLoading(false);
