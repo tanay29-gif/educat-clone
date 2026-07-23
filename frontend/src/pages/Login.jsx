@@ -1,7 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { userService } from "../services/userService";
-import "../styles/Auth.css";
+import {
+  Container,
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  Paper,
+  Link,
+} from "@mui/material";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -27,22 +36,16 @@ export default function Login() {
 
     try {
       const response = await userService.login(formData);
-      console.log("✅ Full response object:", response);
-      console.log("✅ Response data structure:", response.data);
-      
       const tokenData = response.data.data;
-      console.log("✅ Token data extracted:", tokenData);
-      
+
       if (!tokenData || !tokenData.accessToken) {
         throw new Error("No tokens received from server");
       }
-      
+
       localStorage.setItem("accessToken", tokenData.accessToken);
       localStorage.setItem("refreshToken", tokenData.refreshToken);
       localStorage.setItem("user", JSON.stringify(tokenData.user));
-      
-      console.log("✅ Tokens saved to localStorage, navigating...");
-      // Redirect based on user role
+
       if (tokenData.user.role === "instructor") {
         navigate("/instructor-dashboard");
       } else {
@@ -56,42 +59,68 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Login to Your Account</h2>
-        {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Username</label>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <button type="submit" disabled={loading} className="submit-btn">
+    <Container component="main" maxWidth="xs">
+      <Paper
+        elevation={3}
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: 4,
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Login to Your Account
+        </Typography>
+        {error && (
+          <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
+            {error}
+          </Alert>
+        )}
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+            value={formData.username}
+            onChange={handleChange}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
+          >
             {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <p className="auth-link">
-          Don't have an account? <a href="/register">Register</a>
-        </p>
-      </div>
-    </div>
+          </Button>
+          <Typography variant="body2" align="center">
+            Don't have an account?{" "}
+            <Link component={RouterLink} to="/register" variant="body2">
+              {"Register"}
+            </Link>
+          </Typography>
+        </Box>
+      </Paper>
+    </Container>
   );
 }
+

@@ -54,7 +54,6 @@ export default function Header({ user, setUser }) {
   const [canGoBack, setCanGoBack] = useState(false);
 
   useEffect(() => {
-    // Check if we can go back
     setCanGoBack(window.history.length > 1);
   }, []);
 
@@ -86,11 +85,17 @@ export default function Header({ user, setUser }) {
       navigate(`/courses?search=${searchQuery}`);
       setSearchQuery('');
     }
-  };{canGoBack && (
-            <IconButton 
-              size="large" 
-              edge="start" 
-              color="inherit" 
+  };
+
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" color="primary">
+        <Toolbar>
+          {canGoBack && (
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
               sx={{ mr: 1 }}
               onClick={() => navigate(-1)}
               title="Go Back"
@@ -98,15 +103,6 @@ export default function Header({ user, setUser }) {
               <ArrowBackIcon />
             </IconButton>
           )}
-          
-
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-        <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant="h6"
             noWrap
@@ -139,15 +135,11 @@ export default function Header({ user, setUser }) {
                 Sign In
               </Button>
               <Button
+                variant="outlined"
                 color="inherit"
                 component={RouterLink}
                 to="/register"
-                sx={{
-                  ml: 2,
-                  border: '1px solid white',
-                  borderRadius: '4px',
-                  px: 2
-                }}
+                sx={{ ml: 2 }}
               >
                 Sign Up
               </Button>
@@ -165,7 +157,6 @@ export default function Header({ user, setUser }) {
                     width: 32,
                     height: 32,
                     cursor: 'pointer',
-                    bgcolor: '#764ba2'
                   }}
                   src={user.avatar}
                   alt={user.username}
@@ -204,3 +195,4 @@ export default function Header({ user, setUser }) {
     </Box>
   );
 }
+

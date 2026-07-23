@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import theme from './theme';
 import Header from './components/Header';
 import CourseDetail from './pages/CourseDetail';
 import CourseDetailPage from './pages/CourseDetailPage';
@@ -15,17 +15,9 @@ import InstructorDashboard from './pages/InstructorDashboard';
 import StudentDashboard from './pages/StudentDashboard';
 import SectionManagement from './pages/SectionManagement';
 import CourseMange from './pages/CourseMange';
-import './styles/Auth.css';
-import './styles/Profile.css';
-import './styles/CreateCourse.css';
-import './styles/EditCourse.css';
-import './styles/InstructorDashboard.css';
-import './styles/StudentDashboard.css';
-import './styles/Courses.css';
-import './styles/CourseDetail.css';
-import './styles/SectionManagement.css';
 
-const theme = createTheme();
+
+
 
 // Protected Route Component
 function ProtectedRoute({ children }) {

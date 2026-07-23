@@ -1,10 +1,9 @@
 import { defineConfig } from 'vitest/config' // Import from vitest/config
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react()],
   test: {
     // This adds support for the browser-like environment needed for React components
     environment: 'jsdom',
