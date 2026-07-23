@@ -16,11 +16,9 @@ jobs:
   test-frontend:
     runs-on: ubuntu-latest
     
-    # NEW LOGIC:
-    # If the event is a 'push', it returns '' (no environment).
-    # If the event is a 'pull_request' or anything else, it uses 'Preview'.
-    environment:
-      name: ${{ github.event_name == 'push' && '' || 'Preview' }}
+    # This specifically tells GitHub: if it's a push, use NO environment. 
+    # If it's a PR, use the 'Preview' environment.
+    environment: ${{ github.event_name == 'push' && fromJSON('null') || 'Preview' }}
 
     defaults:
       run:
