@@ -1,6 +1,23 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { courseService } from "../services/courseService";
-import "../styles/Courses.css";
+import {
+  Container,
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+  Alert,
+  Paper,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  Pagination,
+} from "@mui/material";
+import CourseCard from "../components/CourseCard";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
@@ -14,16 +31,18 @@ export default function Courses() {
     price: "",
     sort: "createdAt",
   });
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
 
   useEffect(() => {
-    if (isSearching && searchQuery) {
-      handleSearch();
+    const query = searchParams.get("search");
+    if (query) {
+      setSearchQuery(query);
+      handleSearch(query, page);
     } else {
       fetchCourses();
     }
-  }, [filters, page, isSearching, searchQuery]);
+  }, [filters, page, searchParams]);
 
   const fetchCourses = async () => {
     setLoading(true);
@@ -33,21 +52,21 @@ export default function Courses() {
         limit: 12,
         ...filters,
       });
-      console.log("Courses response:", response.data);
       setCourses(response.data?.data || []);
       setTotalPages(Math.ceil((response.data?.data?.length || 0) / 12));
-    } catch  {
+    } catch {
       setError("Failed to fetch courses");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (query, pageNum) => {
     setLoading(true);
     try {
-      const response = await courseService.searchCourses(searchQuery, page, 12);
+      const response = await courseService.searchCourses(query, pageNum, 12);
       setCourses(response.data?.data || []);
+      setTotalPages(Math.ceil((response.data?.total || 0) / 12));
     } catch {
       setError("Search failed");
     } finally {
@@ -66,165 +85,120 @@ export default function Courses() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    setIsSearching(true);
+    setSearchParams({ search: searchQuery });
     setPage(1);
   };
 
   const handleClearSearch = () => {
     setSearchQuery("");
-    setIsSearching(false);
+    setSearchParams({});
     setPage(1);
   };
 
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
   return (
-    <div className="courses-page">
-      <div className="courses-header">
-        <h1>Explore Courses</h1>
+    <Container sx={{ py: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Explore Courses
+      </Typography>
+      <Box component="form" onSubmit={handleSearchSubmit} sx={{ mb: 4, display: "flex", gap: 2 }}>
+        <TextField
+          fullWidth
+          label="Search courses..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <Button type="submit" variant="contained">
+          Search
+        </Button>
+        {searchParams.get("search") && (
+          <Button variant="outlined" onClick={handleClearSearch}>
+            Clear
+          </Button>
+        )}
+      </Box>
 
-        <form onSubmit={handleSearchSubmit} className="search-form">
-          <input
-            type="text"
-            placeholder="Search courses..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit">Search</button>
-          {isSearching && (
-            <button type="button" onClick={handleClearSearch} className="clear-btn">
-              Clear
-            </button>
-          )}
-        </form>
-      </div>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={3}>
+          <Paper elevation={2} sx={{ p: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              Filters
+            </Typography>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Category</InputLabel>
+              <Select name="category" value={filters.category} onChange={handleFilterChange} label="Category">
+                <MenuItem value="">All Categories</MenuItem>
+                <MenuItem value="web">Web Development</MenuItem>
+                <MenuItem value="mobile">Mobile Development</MenuItem>
+                <MenuItem value="data">Data Science</MenuItem>
+                <MenuItem value="design">Design</MenuItem>
+                <MenuItem value="business">Business</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Level</InputLabel>
+              <Select name="level" value={filters.level} onChange={handleFilterChange} label="Level">
+                <MenuItem value="">All Levels</MenuItem>
+                <MenuItem value="beginner">Beginner</MenuItem>
+                <MenuItem value="intermediate">Intermediate</MenuItem>
+                <MenuItem value="advanced">Advanced</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Price</InputLabel>
+              <Select name="price" value={filters.price} onChange={handleFilterChange} label="Price">
+                <MenuItem value="">All Prices</MenuItem>
+                <MenuItem value="free">Free</MenuItem>
+                <MenuItem value="paid">Paid</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Sort By</InputLabel>
+              <Select name="sort" value={filters.sort} onChange={handleFilterChange} label="Sort By">
+                <MenuItem value="createdAt">Newest</MenuItem>
+                <MenuItem value="popular">Most Popular</MenuItem>
+                <MenuItem value="price-low">Price: Low to High</MenuItem>
+              </Select>
+            </FormControl>
+          </Paper>
+        </Grid>
 
-      <div className="courses-container">
-        <div className="filters-sidebar">
-          <h3>Filters</h3>
-
-          <div className="filter-group">
-            <label>Category</label>
-            <select
-              name="category"
-              value={filters.category}
-              onChange={handleFilterChange}
-            >
-              <option value="">All Categories</option>
-              <option value="web">Web Development</option>
-              <option value="mobile">Mobile Development</option>
-              <option value="data">Data Science</option>
-              <option value="design">Design</option>
-              <option value="business">Business</option>
-            </select>
-          </div>
-
-          <div className="filter-group">
-            <label>Level</label>
-            <select
-              name="level"
-              value={filters.level}
-              onChange={handleFilterChange}
-            >
-              <option value="">All Levels</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
-          </div>
-
-          <div className="filter-group">
-            <label>Price</label>
-            <select
-              name="price"
-              value={filters.price}
-              onChange={handleFilterChange}
-            >
-              <option value="">All Prices</option>
-              <option value="free">Free</option>
-              <option value="paid">Paid</option>
-            </select>
-          </div>
-
-          <div className="filter-group">
-            <label>Sort By</label>
-            <select
-              name="sort"
-              value={filters.sort}
-              onChange={handleFilterChange}
-            >
-              <option value="createdAt">Newest</option>
-              <option value="popular">Most Popular</option>
-              <option value="price-low">Price: Low to High</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="courses-grid-container">
-          {error && <div className="error-message">{error}</div>}
-
+        <Grid item xs={12} md={9}>
           {loading ? (
-            <div className="loading">Loading courses...</div>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : error ? (
+            <Alert severity="error">{error}</Alert>
           ) : courses.length === 0 ? (
-            <div className="no-courses">
-              <p>No courses found. Try adjusting your filters.</p>
-            </div>
+            <Typography>No courses found. Try adjusting your filters.</Typography>
           ) : (
             <>
-              <div className="courses-grid">
+              <Grid container spacing={3}>
                 {courses.map((course) => (
-                  <div key={course._id} className="course-card">
-                    <img
-                      src={course.thumbnail}
-                      alt={course.title}
-                      className="course-thumbnail"
-                    />
-                    <div className="course-content">
-                      <h3>{course.title}</h3>
-                      <p className="instructor">
-                        By: {course.instructor?.name || "Unknown"}
-                      </p>
-                      <div className="course-meta">
-                        <span className="rating">⭐ 4.5</span>
-                        <span className="level">{course.level}</span>
-                      </div>
-                      <div className="course-footer">
-                        <span className="price">
-                          {course.price === 0 ? "Free" : `$${course.price}`}
-                        </span>
-                        <a
-                          href={`/course/${course._id}`}
-                          className="view-btn"
-                        >
-                          View Course
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+                  <Grid item key={course._id} xs={12} sm={6} md={4}>
+                    <CourseCard course={course} />
+                  </Grid>
                 ))}
-              </div>
-
+              </Grid>
               {totalPages > 1 && (
-                <div className="pagination">
-                  <button
-                    onClick={() => setPage(Math.max(1, page - 1))}
-                    disabled={page === 1}
-                  >
-                    Previous
-                  </button>
-                  <span>
-                    Page {page} of {totalPages}
-                  </span>
-                  <button
-                    onClick={() => setPage(Math.min(totalPages, page + 1))}
-                    disabled={page === totalPages}
-                  >
-                    Next
-                  </button>
-                </div>
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                  <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={handlePageChange}
+                    color="primary"
+                  />
+                </Box>
               )}
             </>
           )}
-        </div>
-      </div>
-    </div>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
+

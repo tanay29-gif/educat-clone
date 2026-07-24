@@ -11,27 +11,40 @@ import { Link as RouterLink } from 'react-router-dom';
 
 export default function CourseCard({ course }) {
   return (
-    <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <CardMedia component="img" height="160" image={course.image} alt={course.title} />
+    <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <CardMedia
+        component="img"
+        height="160"
+        image={course.thumbnail}
+        alt={course.title}
+      />
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h6" component="div">
+        <Typography gutterBottom variant="h6" component="div" sx={{ mb: 1 }}>
           {course.title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {course.instructor}
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          By: {course.instructor?.name || "Unknown"}
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-          <Rating value={course.rating} precision={0.1} size="small" readOnly />
-          <Typography variant="caption" sx={{ ml: 1 }}>
-            {course.rating} • {course.students} students
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+          <Rating name="read-only" value={course.rating || 0} precision={0.5} readOnly />
+          <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+            ({course.students || 0})
           </Typography>
         </Box>
       </CardContent>
-      <CardActions>
-        <Button size="small" component={RouterLink} to={`/courses/${course.id}`}>View</Button>
-        <Button size="small" variant="contained" sx={{ ml: 'auto' }}>
-          ${course.price}
+      <CardActions sx={{ mt: 'auto', p: 2 }}>
+        <Button
+          component={RouterLink}
+          to={`/course/${course._id}`}
+          size="small"
+          variant="outlined"
+          fullWidth
+        >
+          View Details
         </Button>
+        <Typography variant="h6" sx={{ ml: 'auto', color: 'primary.main' }}>
+          {course.price === 0 ? "Free" : `$${course.price}`}
+        </Typography>
       </CardActions>
     </Card>
   );
